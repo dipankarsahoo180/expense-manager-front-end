@@ -2,10 +2,22 @@
     "lwc": { "modules": [{ "dir": "$rootDir/src/modules" }] },
     "routes": [
         {
-            "id": "login-home",
+            "id": "home",
             "path": "/",
-            "rootComponent": "modules/app",
-            "layoutTemplate": "$layoutsDir/index.html"
+            "rootComponent": "pages/home",
+            "layoutTemplate": "$layoutsDir/index.html",
+            "bootstrap":{
+                "syntheticShadow": true
+            }
+        },
+        {
+            "id": "login",
+            "path": "/login",
+            "rootComponent": "pages/login",
+            "layoutTemplate": "$layoutsDir/index.html",
+            "bootstrap":{
+                "syntheticShadow": true
+            }
         }
     ],
     "assets": [
