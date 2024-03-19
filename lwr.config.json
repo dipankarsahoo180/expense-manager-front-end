@@ -4,7 +4,8 @@
         {
             "id": "login-home",
             "path": "/",
-            "rootComponent": "modules/app"
+            "rootComponent": "modules/app",
+            "layoutTemplate": "$layoutsDir/index.html"
         }
     ],
     "assets": [
