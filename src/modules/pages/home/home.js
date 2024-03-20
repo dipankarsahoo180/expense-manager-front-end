@@ -4,6 +4,7 @@ export default class Home extends LightningElement{
     expenseRecords =[]
     categoryTableData=[]
     chartData
+    showModal = true
     async connectedCallback(){
       const expenses = await this.getExpenses()
       console.log("expenses", expenses)
@@ -79,5 +80,17 @@ export default class Home extends LightningElement{
             style:'currency',
             currency:'USD'
         })
+    }
+
+    //Modal Cancel Handler
+    cancelHandler(){
+        console.log("Cancel Clicked")
+        this.showModal = false
+    }
+
+    //Modal Save Handler
+    saveHandler(){
+        this.showModal = false
+        console.log("Save Clicked")
     }
 }
