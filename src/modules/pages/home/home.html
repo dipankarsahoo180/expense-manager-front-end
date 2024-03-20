@@ -1,14 +1,31 @@
 <template>
     <components-navbar></components-navbar>
     <div class="slds-p-around_large wrapper">
-        <lightning-card title="Expenses Details">
-            <components-datatable 
-            records={expenseRecords}
-            onedit={editHandler}
-            ondelete={deleteHandler}></components-datatable>
-        </lightning-card>
-        <lightning-card title="Expenses By Categories Chart View">
-            <components-chartbox></components-chartbox>
-        </lightning-card>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+                <lightning-card title="Expenses Details">
+                    <components-datatable records={expenseRecords}
+                    onedit={editHandler}
+                    ondelete={deleteHandler}></components-datatable>
+                </lightning-card>
+            </lightning-layout-item>
+
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="4" large-device-size="4" padding="around-small">
+                <lightning-card title="Expenses By Categories Chart View">
+                    <template lwc:if={chartData}>
+                        <components-chartbox chart-records={chartData}></components-chartbox>
+                    </template>
+                </lightning-card>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8" padding="around-small">
+                <lightning-card title="Expenses By Categories Table View">
+                    <div>table will come soon</div>
+                </lightning-card>
+            </lightning-layout-item>
+        </lightning-layout>
+        
+        
     </div>
+   
+   
 </template>
