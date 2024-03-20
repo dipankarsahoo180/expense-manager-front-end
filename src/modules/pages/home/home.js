@@ -2,6 +2,7 @@ import { LightningElement } from 'lwc';
 import {categoryList} from './categoryList'
 const SERVER_URL = 'http://localhost:3004'
 const ADD_ACTION = 'ADD'
+const EDIT_ACTION = 'EDIT'
 export default class Home extends LightningElement{
     expenseRecords =[]
     categoryTableData=[]
@@ -13,6 +14,11 @@ export default class Home extends LightningElement{
     //Define a getter for category options
     get categoryOptions(){
         return categoryList
+    }
+
+    //Define a getter that sets the modal label
+    get modalActionLabel(){
+        return this.action === EDIT_ACTION ? 'Edit Expense' : 'Add Expense'
     }
 
 
@@ -52,6 +58,9 @@ export default class Home extends LightningElement{
 
     //edit row handler
     editHandler(event){
+        this.action= EDIT_ACTION
+        this.showModal = true
+        this.formData = {...event.detail}
         console.log(event.detail)
     }
     //delete row handler
@@ -97,14 +106,20 @@ export default class Home extends LightningElement{
     cancelHandler(){
         console.log("Cancel Clicked")
         this.showModal = false
+        this.action= null
     }
 
     //Modal Save Handler
     saveHandler(){
-        
+        this.action= null
         if(this.isFormValid()){
             this.showModal = false
-            console.log("Save Clicked success", this.formData)
+            if(this.formData.Id){
+                console.log("Save Clicked success for Update", this.formData)
+            } else {
+                console.log("Save Clicked success for Add", this.formData)
+            }
+            
         } else {
             console.log("Save Clicked Validation failed")
         }
