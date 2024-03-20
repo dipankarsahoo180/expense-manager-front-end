@@ -15,11 +15,30 @@
                     <template lwc:if={chartData}>
                         <components-chartbox chart-records={chartData}></components-chartbox>
                     </template>
+                    
                 </lightning-card>
             </lightning-layout-item>
             <lightning-layout-item size="12" small-device-size="12" medium-device-size="8" large-device-size="8" padding="around-small">
                 <lightning-card title="Expenses By Categories Table View">
-                    <div>table will come soon</div>
+                    <div class="slds-p-around_large">
+                        <table>
+                            <thead>
+                                <th>No</th>
+                                <th>Category</th>
+                                <th>Total Amount</th>
+                            </thead>
+                            <tbody>
+                                <template for:each={categoryTableData} for:item="item">
+                                    <tr key={item.id}>
+                                        <td>{item.id}</td>
+                                        <td>{item.category}</td>
+                                        <td>{item.amount}</td>
+                                    </tr>
+                                </template>
+                                
+                            </tbody>
+                        </table>
+                    </div>
                 </lightning-card>
             </lightning-layout-item>
         </lightning-layout>

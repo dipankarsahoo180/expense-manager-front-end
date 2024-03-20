@@ -2,8 +2,8 @@ import { LightningElement } from 'lwc';
 const SERVER_URL = 'http://localhost:3004'
 export default class Home extends LightningElement{
     expenseRecords =[]
+    categoryTableData=[]
     chartData
-    
     async connectedCallback(){
       const expenses = await this.getExpenses()
       console.log("expenses", expenses)
@@ -46,8 +46,7 @@ export default class Home extends LightningElement{
     deleteHandler(event){
         console.log(event.detail)
     }
-
-    // Method to create chart data based on expenses
+  // Method to create chart data based on expenses
     createChartData(){
         const categorySums = {}
 
@@ -61,9 +60,24 @@ export default class Home extends LightningElement{
             }
         })
         console.log("categorySums", categorySums)
+        this.categoryTableData = Object.keys(categorySums).map((item,index)=>{
+            return ({
+                "id":index+1,
+                "category":item,
+                "amount":this.formatCurrency(categorySums[item])
+            })
+        })
+        console.log(" this.categoryTableData ",  this.categoryTableData )
         this.chartData = {
             labels:Object.keys(categorySums),
             results:Object.values(categorySums)
         }
+    }
+
+    formatCurrency(number){
+        return number.toLocaleString('en-US', {
+            style:'currency',
+            currency:'USD'
+        })
     }
 }
