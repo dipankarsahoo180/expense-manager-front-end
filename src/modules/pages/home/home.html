@@ -1,5 +1,11 @@
 <template>
-    <h1>I am home Page</h1>
-    <button class="slds-button slds-button_brand">Brand Button</button>
-    <a href="/login">Take me to login page</a>
+    <components-navbar></components-navbar>
+    <div class="slds-p-around_large wrapper">
+        <lightning-card title="Expenses Details">
+            <components-datatable 
+            records={expenseRecords}
+            onedit={editHandler}
+            ondelete={deleteHandler}></components-datatable>
+        </lightning-card>
+    </div>
 </template>

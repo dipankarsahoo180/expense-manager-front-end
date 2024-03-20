@@ -1,9 +1,12 @@
 import { LightningElement } from 'lwc';
-const SERVER_URL = 'http://localhost:3004' //npx json-server db.json -p 3004 to start server
+const SERVER_URL = 'http://localhost:3004'
 export default class Home extends LightningElement{
+    expenseRecords =[]
+
     async connectedCallback(){
       const expenses = await this.getExpenses()
       console.log("expenses", expenses)
+      this.expenseRecords = expenses.totalSize > 0 ? expenses.records :[]
     }
 
     //Method to get Expenses data
@@ -31,5 +34,14 @@ export default class Home extends LightningElement{
             console.log("Error Occurred", error)
         }
 
+    }
+
+    //edit row handler
+    editHandler(event){
+        console.log(event.detail)
+    }
+    //delete row handler
+    deleteHandler(event){
+        console.log(event.detail)
     }
 }
