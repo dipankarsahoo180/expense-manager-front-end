@@ -3,6 +3,15 @@
     <div class="slds-p-around_large wrapper">
         <lightning-layout multiple-rows>
             <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
+                <div class="slds-text-align_right">
+                    <lightning-button
+                    variant="brand"
+                    label="Add Expense"
+                    icon-name="utility:add"
+                    onclick={addExpense}></lightning-button>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">
                 <lightning-card title="Expenses Details">
                     <components-datatable records={expenseRecords}
                     onedit={editHandler}
@@ -47,7 +56,37 @@
     </div>
     <template lwc:if={showModal}>
         <components-my-modal heading="Add Expenses">
-            <input type="text"/>
+            <form>
+                <lightning-input type="text" label="Name" required 
+                name="Expense_Name__c" value={formData.Expense_Name__c} 
+                class="validate"
+                onkeyup={changeHandler}></lightning-input>
+
+                <lightning-input type="number" label="Amount" required 
+                name="Amount__c" value={formData.Amount__c} 
+                class="validate"
+                onkeyup={changeHandler}></lightning-input>
+
+                <lightning-input type="date" label="Expense Date" required class="validate"
+                name="Date__c" value={formData.Date__c} onchange={changeHandler}></lightning-input>
+
+                <lightning-combobox
+                name="Category__c"
+                label="Category"
+                value={formData.Category__c}
+                options={categoryOptions}
+                required
+                class="validate"
+                onchange={changeHandler} ></lightning-combobox>
+
+                <lightning-textarea 
+                name="Notes__c"
+                label="Notes" 
+                value={formData.Notes__c}
+                onkeyup={changeHandler}
+                class="validate"
+                ></lightning-textarea>
+            </form>
             <div slot="footer">
                 <button class="slds-button slds-button_neutral" onclick={cancelHandler}>Cancel</button>
                 <button class="slds-button slds-button_brand" onclick={saveHandler}>Add Expense</button>
