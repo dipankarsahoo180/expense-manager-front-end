@@ -2,6 +2,7 @@ import { LightningElement } from 'lwc';
 import LightningConfirm from 'lightning/confirm';
 import {categoryList} from './categoryList'
 const SERVER_URL = 'http://localhost:3004'
+const BACKEND_URL = 'http://localhost:3002'
 const ADD_ACTION = 'ADD'
 const EDIT_ACTION = 'EDIT'
 export default class Home extends LightningElement{
@@ -11,6 +12,7 @@ export default class Home extends LightningElement{
     showModal = false
     formData={}
     action
+    loggedInUser
 
     //Define a getter for category options
     get categoryOptions(){
@@ -24,10 +26,30 @@ export default class Home extends LightningElement{
 
 
     async connectedCallback(){
-      const expenses = await this.getExpenses()
-      console.log("expenses", expenses)
-      this.expenseRecords = expenses.totalSize > 0 ? expenses.records :[]
-      this.createChartData()
+        try{
+            const user = await this.getLoggedInUser()
+            console.log("user info", user)
+            if(!user.user_id){
+                window.location.href = '/login'
+            } else {
+                this.loggedInUser = user
+                const expenses = await this.getExpenses()
+                console.log("expenses", expenses)
+                this.expenseRecords = expenses?.totalSize > 0 ? expenses?.records :[]
+                this.createChartData()
+            }
+            
+        } catch(error){
+            console.error("response error", error)
+        }
+      
+    }
+
+    //Method to get logged-in user data
+
+    async getLoggedInUser(){
+        const url = `${BACKEND_URL}/oauth2/whoami`
+        return await this.makeApiRequest(url)
     }
 
     //Method to get Expenses data
