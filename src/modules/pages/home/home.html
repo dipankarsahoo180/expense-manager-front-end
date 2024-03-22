@@ -1,5 +1,8 @@
 <template>
     <components-navbar logged-in-user={loggedInUser}></components-navbar>
+    <template lwc:if={showSpinner}>
+        <components-loader logged-in-user={loggedInUser}></components-loader>
+    </template>
     <div class="slds-p-around_large wrapper">
         <lightning-layout multiple-rows>
             <lightning-layout-item size="12" small-device-size="12" medium-device-size="12" large-device-size="12" padding="around-small">

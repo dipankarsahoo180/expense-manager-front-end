@@ -13,7 +13,7 @@ export default class Home extends LightningElement{
     formData={}
     action
     loggedInUser
-
+    showSpinner = false;
     //Define a getter for category options
     get categoryOptions(){
         return categoryList
@@ -60,6 +60,7 @@ export default class Home extends LightningElement{
 
     //Generic API Method
     async makeApiRequest(url, method = 'GET', data=null){
+        this.showSpinner = true;
         try{
             const requestOptions = {
                 method,
@@ -75,6 +76,8 @@ export default class Home extends LightningElement{
             return response.json()
         }catch(error){
             console.log("Error Occurred", error)
+        }finally{
+            this.showSpinner = false;
         }
 
     }
