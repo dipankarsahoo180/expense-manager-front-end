@@ -92,6 +92,7 @@ export default class Home extends LightningElement{
     //delete row handler
     deleteHandler(event){
         console.log(event.detail)
+        this.formData = {...event.detail}
         this.handleConfirmClick()
     }
     // Method to make a confirmation dialog for delete action
@@ -104,6 +105,10 @@ export default class Home extends LightningElement{
         });
         if(result){
             console.log("deleted record")
+            const url = `${BACKEND_URL}/expenses/${this.formData?.Id}`
+            const response = await this.makeApiRequest(url,'DELETE',this.formData);
+            console.log("delete success for Update", this.formData)
+            this.expenseRecords = this.expenseRecords.filter(obj=>obj.Id != this.formData.Id)
         }
     }
   // Method to create chart data based on expenses
@@ -150,19 +155,34 @@ export default class Home extends LightningElement{
 
     //Modal Save Handler
     saveHandler(){
-        this.action= null
         if(this.isFormValid()){
             this.showModal = false
             if(this.formData.Id){
+                const url = `${BACKEND_URL}/expenses/${this.formData?.Id}`
                 console.log("Save Clicked success for Update", this.formData)
+                this.addAndUpdateHandler(url,'PUT')
             } else {
+                const url = `${BACKEND_URL}/expenses`
+                this.addAndUpdateHandler(url,'POST')
                 console.log("Save Clicked success for Add", this.formData)
             }
-            
         } else {
             console.log("Save Clicked Validation failed")
         }
         
+    }
+
+    async addAndUpdateHandler(url,method){
+        const response = await this.makeApiRequest(url,method,this.formData);
+        if(response?.id){
+            const expenses = await this.getExpenses();
+            console.log("expenses", expenses)
+            this.expenseRecords = expenses?.totalSize > 0 ? expenses?.records :[]
+            this.createChartData()
+            this.showModal = false;
+            this.action= null;
+        }
+
     }
 
     // Add Expense Handler
