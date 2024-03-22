@@ -29,7 +29,7 @@ export default class Home extends LightningElement{
             const user = await this.getLoggedInUser()
             //console.log("user info", user)
             if(!user?.user_id){
-                //window.location.href = '/login'
+                window.location.href = '/login'
             } else {
                 this.loggedInUser = user
                 await this.fetchExpenseData()
