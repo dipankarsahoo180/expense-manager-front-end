@@ -54,7 +54,7 @@ export default class Home extends LightningElement{
 
     //Method to get Expenses data
     async getExpenses(){
-        const url = `${SERVER_URL}/expenses`
+        const url = `${BACKEND_URL}/expenses`
         return await this.makeApiRequest(url)
     }
 
