@@ -1,5 +1,5 @@
 import { LightningElement,api } from "lwc";
-const SERVER_URL = 'http://localhost:3002'
+const BACKEND_URL = 'http://localhost:3002'
 export default class Navbar extends LightningElement{
     @api loggedInUser
     
@@ -8,7 +8,7 @@ export default class Navbar extends LightningElement{
     }
 
     get logOutUrl(){
-        return `${SERVER_URL}/oauth2/logout`
+        return `${BACKEND_URL}/oauth2/logout`
     }
 
 }

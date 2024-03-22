@@ -1,7 +1,6 @@
 import { LightningElement } from 'lwc';
 import LightningConfirm from 'lightning/confirm';
 import {categoryList} from './categoryList'
-const SERVER_URL = 'http://localhost:3004'
 const BACKEND_URL = 'http://localhost:3002'
 const ADD_ACTION = 'ADD'
 const EDIT_ACTION = 'EDIT'
@@ -28,23 +27,25 @@ export default class Home extends LightningElement{
     async connectedCallback(){
         try{
             const user = await this.getLoggedInUser()
-            console.log("user info", user)
-            if(!user.user_id){
+            //console.log("user info", user)
+            if(!user?.user_id){
                 window.location.href = '/login'
             } else {
                 this.loggedInUser = user
-                const expenses = await this.getExpenses()
-                console.log("expenses", expenses)
-                this.expenseRecords = expenses?.totalSize > 0 ? expenses?.records :[]
-                this.createChartData()
+                await this.fetchExpenseData()
             }
             
         } catch(error){
-            console.error("response error", error)
+            //console.error("response error", error)
         }
       
     }
 
+    async fetchExpenseData(){
+        const expenses = await this.getExpenses()
+        this.expenseRecords = expenses?.totalSize > 0 ? expenses?.records :[]
+        this.createChartData()
+    }
     //Method to get logged-in user data
 
     async getLoggedInUser(){
@@ -55,7 +56,11 @@ export default class Home extends LightningElement{
     //Method to get Expenses data
     async getExpenses(){
         const url = `${BACKEND_URL}/expenses`
-        return await this.makeApiRequest(url)
+        try {
+            return await this.makeApiRequest(url)            
+        } catch (error) {
+            return null;
+        }
     }
 
     //Generic API Method
@@ -75,7 +80,7 @@ export default class Home extends LightningElement{
             }
             return response.json()
         }catch(error){
-            console.log("Error Occurred", error)
+            //console.log("Error Occurred", error)
         }finally{
             this.showSpinner = false;
         }
@@ -87,11 +92,11 @@ export default class Home extends LightningElement{
         this.action= EDIT_ACTION
         this.showModal = true
         this.formData = {...event.detail}
-        console.log(event.detail)
+        //console.log(event.detail)
     }
     //delete row handler
     deleteHandler(event){
-        console.log(event.detail)
+        //console.log(event.detail)
         this.formData = {...event.detail}
         this.handleConfirmClick()
     }
@@ -104,10 +109,10 @@ export default class Home extends LightningElement{
             theme:'error'
         });
         if(result){
-            console.log("deleted record")
+            //console.log("deleted record")
             const url = `${BACKEND_URL}/expenses/${this.formData?.Id}`
             const response = await this.makeApiRequest(url,'DELETE',this.formData);
-            console.log("delete success for Update", this.formData)
+            //console.log("delete success for Update", this.formData)
             this.expenseRecords = this.expenseRecords.filter(obj=>obj.Id != this.formData.Id)
         }
     }
@@ -124,7 +129,7 @@ export default class Home extends LightningElement{
                 categorySums[Category__c] = Amount__c
             }
         })
-        console.log("categorySums", categorySums)
+        //console.log("categorySums", categorySums)
         this.categoryTableData = Object.keys(categorySums).map((item,index)=>{
             return ({
                 "id":index+1,
@@ -132,7 +137,7 @@ export default class Home extends LightningElement{
                 "amount":this.formatCurrency(categorySums[item])
             })
         })
-        console.log(" this.categoryTableData ",  this.categoryTableData )
+        //console.log(" this.categoryTableData ",  this.categoryTableData )
         this.chartData = {
             labels:Object.keys(categorySums),
             results:Object.values(categorySums)
@@ -148,7 +153,7 @@ export default class Home extends LightningElement{
 
     //Modal Cancel Handler
     cancelHandler(){
-        console.log("Cancel Clicked")
+        //console.log("Cancel Clicked")
         this.showModal = false
         this.action= null
     }
@@ -159,15 +164,15 @@ export default class Home extends LightningElement{
             this.showModal = false
             if(this.formData.Id){
                 const url = `${BACKEND_URL}/expenses/${this.formData?.Id}`
-                console.log("Save Clicked success for Update", this.formData)
+                //console.log("Save Clicked success for Update", this.formData)
                 this.addAndUpdateHandler(url,'PUT')
             } else {
                 const url = `${BACKEND_URL}/expenses`
                 this.addAndUpdateHandler(url,'POST')
-                console.log("Save Clicked success for Add", this.formData)
+                //console.log("Save Clicked success for Add", this.formData)
             }
         } else {
-            console.log("Save Clicked Validation failed")
+            //console.log("Save Clicked Validation failed")
         }
         
     }
@@ -175,10 +180,7 @@ export default class Home extends LightningElement{
     async addAndUpdateHandler(url,method){
         const response = await this.makeApiRequest(url,method,this.formData);
         if(response?.id){
-            const expenses = await this.getExpenses();
-            console.log("expenses", expenses)
-            this.expenseRecords = expenses?.totalSize > 0 ? expenses?.records :[]
-            this.createChartData()
+            await this.fetchExpenseData();
             this.showModal = false;
             this.action= null;
         }
