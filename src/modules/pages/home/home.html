@@ -63,12 +63,12 @@
                 <lightning-input type="text" label="Name" required 
                 name="Expense_Name__c" value={formData.Expense_Name__c} 
                 class="validate"
-                onkeyup={changeHandler}></lightning-input>
+                onchange={changeHandler}></lightning-input>
 
                 <lightning-input type="number" label="Amount" required 
                 name="Amount__c" value={formData.Amount__c} 
                 class="validate"
-                onkeyup={changeHandler}></lightning-input>
+                onchange={changeHandler}></lightning-input>
 
                 <lightning-input type="date" label="Expense Date" required class="validate"
                 name="Date__c" value={formData.Date__c} onchange={changeHandler}></lightning-input>
@@ -86,7 +86,7 @@
                 name="Notes__c"
                 label="Notes" 
                 value={formData.Notes__c}
-                onkeyup={changeHandler}
+                onchange={changeHandler}
                 class="validate"
                 ></lightning-textarea>
             </form>

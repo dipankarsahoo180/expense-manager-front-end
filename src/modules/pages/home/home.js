@@ -1,7 +1,7 @@
 import { LightningElement } from 'lwc';
 import LightningConfirm from 'lightning/confirm';
 import {categoryList} from './categoryList'
-const BACKEND_URL = 'http://localhost:3002'
+const BACKEND_URL = 'https://expense-manager-backend-9t6a.onrender.com' || 'http://localhost:3002'
 const ADD_ACTION = 'ADD'
 const EDIT_ACTION = 'EDIT'
 export default class Home extends LightningElement{
