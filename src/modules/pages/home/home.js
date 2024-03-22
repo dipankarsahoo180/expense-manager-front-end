@@ -114,6 +114,7 @@ export default class Home extends LightningElement{
             const response = await this.makeApiRequest(url,'DELETE',this.formData);
             //console.log("delete success for Update", this.formData)
             this.expenseRecords = this.expenseRecords.filter(obj=>obj.Id != this.formData.Id)
+            this.createChartData()
         }
     }
   // Method to create chart data based on expenses
